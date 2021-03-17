@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,5 +19,12 @@ public class MainActivity extends AppCompatActivity {
         toggleView.setChecked(true)
                 .setData("开","关")
                 .build();
+
+        toggleView.setOnCheckedListener(new ToggleView.OnCheckedListener() {
+            @Override
+            public void onChange(boolean isChecked) {
+                Log.i(TAG, "onChange: "+isChecked);
+            }
+        });
     }
 }
