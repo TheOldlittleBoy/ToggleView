@@ -6,6 +6,9 @@
 
     <com.zsl.toggleview.ToggleView
         android:id="@+id/toggle"
+        app:checked="true"
+        app:checkedData="开"
+        app:unCheckedData="关"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

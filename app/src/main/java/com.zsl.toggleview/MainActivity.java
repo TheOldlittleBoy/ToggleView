@@ -17,9 +17,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ToggleView toggleView = findViewById(R.id.toggle);
-        toggleView.setChecked(true)
-                .setData("开","关")
-                .build();
+//        toggleView.setChecked(true)
+//                .setData("开","关")
+//                .build();
 
         toggleView.setOnCheckedListener(isChecked -> Log.i(TAG, "onCreate: "+isChecked));
     }
