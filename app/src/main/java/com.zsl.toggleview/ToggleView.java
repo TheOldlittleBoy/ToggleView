@@ -2,6 +2,7 @@ package com.zsl.toggleview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Typeface;
@@ -10,8 +11,6 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Scroller;
-
-import com.zsl.toggleview.R;
 
 /**
  * @author zsl
@@ -84,18 +83,18 @@ public class ToggleView extends View {
     /**
      * 文本
      */
-    private String data1;
-    private String data2;
+    private String checkedData;
+    private String unCheckedData;
 
 
     public ToggleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init(context);
+        init(context,attrs);
     }
 
     public ToggleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context);
+        init(context,attrs);
     }
 
     /**
@@ -107,9 +106,9 @@ public class ToggleView extends View {
         this.mListener = listener;
     }
 
-    public ToggleView setData(String data1, String data2) {
-        this.data1 = data1;
-        this.data2 = data2;
+    public ToggleView setData(String checkedData, String unCheckedData) {
+        this.checkedData = checkedData;
+        this.unCheckedData = unCheckedData;
         return this;
     }
 
@@ -132,9 +131,13 @@ public class ToggleView extends View {
         invalidate();
     }
 
-    private void init(Context context) {
-        setEnabled(true);
-        setClickable(true);
+    private void init(Context context, AttributeSet attrs) {
+        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.ToggleView);
+        isChecked = array.getBoolean(R.styleable.ToggleView_checked, true);
+        checkedData = array.getString(R.styleable.ToggleView_checkedData);
+        unCheckedData = array.getString(R.styleable.ToggleView_unCheckedData);
+        array.recycle();
+
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
@@ -146,15 +149,15 @@ public class ToggleView extends View {
         togglePaint.setColor(getResources().getColor(R.color.white));
 
         checkTextPaint = new Paint();
-        checkTextPaint.setTextSize(30);
         checkTextPaint.setAntiAlias(true);
-        checkTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        checkTextPaint.setTextSize(DensityUtil.dp2px(context,20));
         checkTextPaint.setTextAlign(Paint.Align.CENTER);
+        checkTextPaint.setTypeface(Typeface.DEFAULT_BOLD);
         checkTextPaint.setColor(getResources().getColor(R.color.black_title));
 
         normalTextPaint = new Paint();
         normalTextPaint.setAntiAlias(true);
-        normalTextPaint.setTextSize(30);
+        normalTextPaint.setTextSize(DensityUtil.dp2px(context,20));
         normalTextPaint.setTextAlign(Paint.Align.CENTER);
         normalTextPaint.setTypeface(Typeface.DEFAULT);
         normalTextPaint.setColor(getResources().getColor(R.color.gray_contact_name));
@@ -237,13 +240,13 @@ public class ToggleView extends View {
         canvas.drawRoundRect(toggleStartX, PADDING, toggleStartX + toggleWidth, mHeight - PADDING, roundRadius, roundRadius, togglePaint);
 
         //画文字
-        if (data1 != null && data2 != null) {
+        if (checkedData != null && unCheckedData != null) {
             if (isChecked) {
-                canvas.drawText(data1, text1CenterX, textBaseY, checkTextPaint);
-                canvas.drawText(data2, text2CenterX, textBaseY, normalTextPaint);
+                canvas.drawText(checkedData, text1CenterX, textBaseY, checkTextPaint);
+                canvas.drawText(unCheckedData, text2CenterX, textBaseY, normalTextPaint);
             } else {
-                canvas.drawText(data1, text1CenterX, textBaseY, normalTextPaint);
-                canvas.drawText(data2, text2CenterX, textBaseY, checkTextPaint);
+                canvas.drawText(checkedData, text1CenterX, textBaseY, normalTextPaint);
+                canvas.drawText(unCheckedData, text2CenterX, textBaseY, checkTextPaint);
             }
         }
     }
@@ -305,7 +308,7 @@ public class ToggleView extends View {
             default:
                 break;
         }
-        return super.onTouchEvent(event);
+        return true;
     }
 
     @Override

@@ -8,5 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <declare-styleable name="ToggleView">
+        <attr name="checked" format="boolean">true</attr>
+        <attr name="checkedData" format="string">开</attr>
+        <attr name="unCheckedData" format="string">关</attr>
+    </declare-styleable>
 
 </resources>
